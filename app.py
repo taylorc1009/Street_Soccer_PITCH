@@ -11,14 +11,14 @@ import sys, os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
 api = Api(app)
 jsglue = JSGlue(app)
 database.init_app(app)
 
 @app.before_first_request
 def create_tables():
-	if not os.path.isfile('database.db'):
+	if not os.path.isfile('database.db') or os.environ.get('DATABASE_URL'):
 		database.create_all()
 
 	from models.topic import TopicModel
