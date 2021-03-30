@@ -11,16 +11,18 @@ import sys, os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' #os.environ.get('DATABASE_URL', 'sqlite:///database.db')
 api = Api(app)
 jsglue = JSGlue(app)
 database.init_app(app)
 
 @app.before_first_request
 def create_tables():
-	if not os.path.isfile('database.db') or os.environ.get('DATABASE_URL'):
+	# if the database file already exists, don't recreate it
+	if not os.path.isfile('database.db'): #or os.environ.get('DATABASE_URL'):
 		database.create_all()
 
+	# if the data of the first insert (of 'instert_queries' in database.py) doesn't exist in the table yet, the test data hasn't been inserted yet, so insert it
 	from models.topic import TopicModel
 	if not TopicModel.query.first():
 		for query in insert_queries:
