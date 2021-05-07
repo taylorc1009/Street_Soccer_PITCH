@@ -587,15 +587,14 @@ body {
 .topic-name {
     width: inherit;
     margin: auto 0;
+    text-align: right;
 }
 
 .topics-line {
     border-right: 4px solid var(--light);
     height: inherit;
     left: 50%;
-    margin-left: auto;
-    padding-left: 2vw;
-    margin-right: 6vw;
+    margin: 0 2vw;
 }
 
 #topics-menu {
